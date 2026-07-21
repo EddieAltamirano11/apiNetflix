@@ -1,49 +1,23 @@
 //const dns = require('dns');
 //dns.setServers(['8.8.8.8', '1.1.1.1']); // Google + Cloudflare
+
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Para poder recibir datos de tipo JSON
 app.use(morgan("dev"));
+const PORT = 3001
 
-const MONGO_URI = "mongodb+srv://grupo:grupo@servidorprueba.ygegryf.mongodb.net/netflix";
-
-let isConnected = false;
-
-async function conectarDB() {
-    if (isConnected && mongoose.connection.readyState === 1) return;
-    try {
-        await mongoose.connect(MONGO_URI);
-        isConnected = true;
-        console.log("Conectado Correctamente");
-    } catch (error) {
-        isConnected = false;
-        console.log("Error al conectar con MongoDB:", error);
-        throw error;
-    }
-}
-
-// Middleware que asegura la conexión antes de cualquier ruta
-app.use(async (req, res, next) => {
-    try {
-        await conectarDB();
-        next();
-    } catch (error) {
-        res.status(500).json({ mensaje: "Error de conexión a la base de datos", error: error.message });
-    }
-});
-
-/*
 mongoose.connect("mongodb+srv://grupo:grupo@servidorprueba.ygegryf.mongodb.net/netflix").then(()=>{
     console.log("Conectado Correctamente");
 }).catch((error) =>{
     console.log("Error al conectar con MongoDB:", error);
 });
-*/
 
 const peliculaSchema = new mongoose.Schema(
     {
