@@ -53,6 +53,10 @@ const Pelicula = mongoose.model("Pelicula", peliculaSchema,"peliculas");
 
 const Serie = mongoose.model("Serie", serieSchema,"series");
 
+app.get("/", async (req,res) =>{
+    console.log("Api para series y películas de Netflix");
+});
+
 app.get("/peliculas", async (req,res) =>{
     try{
         const peliculas = await Pelicula.find();
