@@ -13,11 +13,21 @@ app.use(express.json()); // Para poder recibir datos de tipo JSON
 app.use(morgan("dev"));
 const PORT = 3001
 
-mongoose.connect("mongodb+srv://grupo:grupo@servidorprueba.ygegryf.mongodb.net/netflix").then(()=>{
-    console.log("Conectado Correctamente");
-}).catch((error) =>{
-    console.log("Error al conectar con MongoDB:", error);
-});
+async function iniciarServidor() {
+    try{
+        await mongoose.connect(
+            "mongodb+srv://grupo:grupo@servidorprueba.ygegryf.mongodb.net/netflix"
+        );
+
+        app.listen(PORT, () => {
+            console.log("Servidor iniciado en http://localhost:" + PORT);
+        });
+    } catch (error) {
+        console.error("No se pudo conectar a mongoDB:");
+        console.error(error);
+    }
+}
+iniciarServidor();
 
 const peliculaSchema = new mongoose.Schema(
     {
@@ -28,6 +38,7 @@ const peliculaSchema = new mongoose.Schema(
         idioma: {type: String, required: true, trim: true},
         calificacion: {type: Number, required: true, min: 0},
         nc: {type: String, required: true, trim: true},
+        portada: {type: String, required: true, trim: true}
     },
     {
         timestamps:true
@@ -43,6 +54,7 @@ const serieSchema = new mongoose.Schema(
         idioma: {type: String, required: true, trim: true},
         calificacion: {type: Number, required: true, min: 0},
         nc: {type: String, required: true, trim: true},
+        portada: {type: String, required: true, trim: true}
     },
     {
         timestamps:true
@@ -110,14 +122,14 @@ app.get("/series/:id", async (req,res) =>{
 
 app.post("/peliculas", async (req,res) => {
     try{  
-        const {titulo,genero,año,duracion,idioma,calificacion,nc} = req.body;
-        if(!titulo || !genero || !año || !duracion || !idioma || !calificacion || !nc){
+        const {titulo,genero,año,duracion,idioma,calificacion,nc,portada} = req.body;
+        if(!titulo || !genero || !año || !duracion || !idioma || !calificacion || !nc || !portada){
             return res.status(404).json({
                 mensaje: "Faltan datos de la pelicula"
             });
         }
         const nuevaPelicula = new Pelicula({
-            titulo,genero,año,duracion,idioma,calificacion,nc
+            titulo,genero,año,duracion,idioma,calificacion,nc,portada
         });
         const peliculaGuardada = await nuevaPelicula.save();
         res.json({
@@ -131,14 +143,14 @@ app.post("/peliculas", async (req,res) => {
 
 app.post("/series", async (req,res) => {
     try{  
-        const {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc} = req.body;
-        if(!titulo || !genero || !año || !temporadas || !episodios || !idioma || !calificacion || !nc){
+        const {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc,portada} = req.body;
+        if(!titulo || !genero || !año || !temporadas || !episodios || !idioma || !calificacion || !nc|| !portada){
             return res.status(404).json({
                 mensaje: "Faltan datos de la serie"
             });
         }
         const nuevaSerie = new Serie({
-            titulo,genero,año,temporadas,episodios,idioma,calificacion,nc
+            titulo,genero,año,temporadas,episodios,idioma,calificacion,nc,portada
         });
         const serieGuardada = await nuevaSerie.save();
         res.json({
@@ -154,16 +166,16 @@ app.post("/series", async (req,res) => {
 app.put("/peliculas/:id", async (req,res) => {
     try{
         const id = req.params.id;
-        const {titulo,genero,año,duracion,idioma,calificacion,nc} = req.body;
+        const {titulo,genero,año,duracion,idioma,calificacion,nc,portada} = req.body;
 
-        if(!titulo || !genero || !año || !duracion || !idioma || !calificacion || !nc){
+        if(!titulo || !genero || !año || !duracion || !idioma || !calificacion || !nc || !portada){
             return res.status(404).json({
                 mensaje: "Faltan datos de la pelicula"
             });
         }
         const peliculaActualizada = await Pelicula.findByIdAndUpdate(
             id,
-            {titulo,genero,año,duracion,idioma,calificacion,nc},
+            {titulo,genero,año,duracion,idioma,calificacion,nc,portada},
              //New te regresa el documento ya actualizado si es true, si no, te regresa el método antes de actualziar
              // runValidators verifica que se cumplan las reglas del esquema antes de intentar hacer la actualización.
             {new: true, runValidators: true}
@@ -190,16 +202,16 @@ app.put("/peliculas/:id", async (req,res) => {
 app.put("/series/:id", async (req,res) => {
     try{
         const id = req.params.id;
-        const {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc} = req.body;
+        const {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc,portada} = req.body;
 
-        if(!titulo || !genero || !año || !temporadas || !episodios || !idioma || !calificacion || !nc){
+        if(!titulo || !genero || !año || !temporadas || !episodios || !idioma || !calificacion || !nc || !portada){
             return res.status(404).json({
                 mensaje: "Faltan datos de la serie"
             });
         }
         const serieActualizada = await Serie.findByIdAndUpdate(
             id,
-            {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc},
+            {titulo,genero,año,temporadas,episodios,idioma,calificacion,nc,portada},
              //New te regresa el documento ya actualizado si es true, si no, te regresa el método antes de actualziar
              // runValidators verifica que se cumplan las reglas del esquema antes de intentar hacer la actualización.
             {new: true, runValidators: true}
