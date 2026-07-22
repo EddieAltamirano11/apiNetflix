@@ -37,9 +37,9 @@ async function agregarPelicula(pelicula) {
     return await respuesta.json();
 
 }
-async function actualizarPelicula(pelicula) {
+async function actualizarPelicula(id,pelicula) {
 
-    const respuesta = await fetch(`${API_URL}/peliculas`, {
+    const respuesta = await fetch(`${API_URL}/peliculas/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

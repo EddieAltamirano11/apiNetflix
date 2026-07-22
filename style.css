@@ -1,0 +1,229 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #141414;
+    color: #ffffff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+}
+
+/* Header */
+.netflix-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(to bottom, #000000 0%, rgba(0, 0, 0, 0.7) 70%, transparent 100%);
+    padding: 20px 4%;
+}
+
+.netflix-logo {
+    color: #e50914;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+}
+
+/* Panel de formulario */
+.panel-formulario {
+    background-color: #181818;
+    margin: 0 4% 32px;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.panel-formulario h2 {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #e5e5e5;
+}
+
+#formulario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+#formulario input,
+#formulario select {
+    background-color: #333333;
+    border: 1px solid #4d4d4d;
+    color: #ffffff;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#formulario input::placeholder {
+    color: #a0a0a0;
+}
+
+#formulario input:focus,
+#formulario select:focus {
+    border-color: #e50914;
+    background-color: #3d3d3d;
+}
+
+#formulario input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#id {
+    display: none;
+    max-width: 220px;
+}
+
+#formulario select {
+    cursor: pointer;
+}
+
+#btnMetodo {
+    background-color: #e50914;
+    color: #ffffff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+#btnMetodo:hover:not(:disabled) {
+    background-color: #f40612;
+}
+
+#btnMetodo:disabled {
+    background-color: #4d4d4d;
+    cursor: not-allowed;
+}
+
+/* Catálogo */
+.catalogo {
+    padding: 0 4% 60px;
+}
+
+.grid-peliculas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+}
+
+.pelicula-card {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #222222;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pelicula-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+    z-index: 10;
+}
+
+.pelicula-portada {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #333333;
+    transition: transform 0.3s ease;
+}
+
+.pelicula-card:hover .pelicula-portada {
+    transform: scale(1.1);
+}
+
+.pelicula-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 55%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pelicula-card:hover .pelicula-overlay {
+    opacity: 1;
+}
+
+.pelicula-overlay h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.pelicula-meta {
+    color: #e5e5e5;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+}
+
+.pelicula-detalle {
+    color: #b3b3b3;
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+}
+
+.pelicula-acciones {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.pelicula-acciones button {
+    flex: 1;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-editar {
+    background-color: #ffffff;
+    color: #141414;
+}
+
+.btn-editar:hover {
+    opacity: 0.8;
+}
+
+.btn-eliminar {
+    background-color: rgba(109, 109, 110, 0.7);
+    color: #ffffff;
+}
+
+.btn-eliminar:hover {
+    background-color: rgba(109, 109, 110, 1);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .grid-peliculas {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 14px;
+    }
+
+    #formulario {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
